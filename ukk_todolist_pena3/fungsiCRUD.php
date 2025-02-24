@@ -1,62 +1,53 @@
 <?php
-include "function.php"; 
+include "function.php"; // Pastikan koneksi database sudah di-include
 
-// Fungsi tambah todolist
-if (isset($_POST["tambahTodo"])) {
-    
+// ✅ 1. Fungsi Tambah Todo
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["tambahTodo"])) {
     if (!$con) {
         die("Koneksi gagal: " . mysqli_connect_error());
     }
 
-    $taskname = $con->real_escape_string($_POST['taskname']);
-    $status = $con->real_escape_string($_POST['status']);
-    $prioritas = $con->real_escape_string($_POST['prioritas']);
-    $tanggal = $con->real_escape_string($_POST['tanggal']);
+    // Sanitasi input
+    $taskname = $con->real_escape_string(trim($_POST['taskname']));
+    $status = $con->real_escape_string(trim($_POST['status']));
+    $prioritas = $con->real_escape_string(trim($_POST['prioritas']));
+    $tanggal = $con->real_escape_string(trim($_POST['tanggal']));
 
     // Simpan ke table todolist
     $sql = "INSERT INTO todolist (taskname, status, prioritas, tanggal) VALUES ('$taskname', '$status', '$prioritas', '$tanggal')";
-    $query = $con->query($sql);
-
-    if ($query === true) {
-        header("location: index.php");
-        exit(); 
+    
+    if ($con->query($sql) === TRUE) {
+        header("Location: index.php?tambah_success=1");
+        exit();
     } else {
-        echo "
-        <script>
-            alert('Tambah Todolist Gagal: " . $con->error . "');
-        </script>
-        ";
+        die("Error tambah: " . $con->error);
     }
 }
 
-//fungsi Edit
-if (isset($_POST["id"])) {
-    $id = $_POST['id'];
-    
+// ✅ 2. Fungsi Edit Todo
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["editTodo"])) {
     if (!$con) {
         die("Koneksi gagal: " . mysqli_connect_error());
     }
 
-    $taskname = $con->real_escape_string($_POST['taskname']);
-    $status = $con->real_escape_string($_POST['status']);
-    $prioritas = $con->real_escape_string($_POST['prioritas']);
-    $tanggal = $con->real_escape_string($_POST['tanggal']);
+    $id = intval($_POST['id']); // Pastikan ID berupa angka
+    $taskname = $con->real_escape_string(trim($_POST['taskname']));
+    $status = $con->real_escape_string(trim($_POST['status']));
+    $prioritas = $con->real_escape_string(trim($_POST['prioritas']));
+    $tanggal = $con->real_escape_string(trim($_POST['tanggal']));
 
-    // Simpan ke table todolist
-    $sql = "UPDATE todolist SET taskname='$taskname',status='$status',prioritas='$prioritas',tanggal='$tanggal' WHERE id='$id'";
-    $query = $con->query($sql);
+    // Query update
+    $sql = "UPDATE todolist SET taskname='$taskname', status='$status', prioritas='$prioritas', tanggal='$tanggal' WHERE id=$id";
 
-    if ($query === true) {
-        header("location: index.php");
-        exit(); 
+    if ($con->query($sql) === TRUE) {
+        header("Location: index.php?edit_success=1");
+        exit();
     } else {
-        echo "
-        <script>
-            alert('edit Todolist Gagal: " . $con->error . "');
-        </script>
-        ";
+        die("Error edit: " . $con->error);
     }
 }
+
+
 //fungsi hapus todolist
 if(isset($_GET['hapus'])){
     $id = $_GET['hapus'];

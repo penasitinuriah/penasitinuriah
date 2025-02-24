@@ -12,8 +12,6 @@ if (!file_exists("function.php") || !file_exists("fungsiCRUD.php")) {
 include "function.php";
 include "fungsiCRUD.php";
 ?>
-
-
 <!doctype html>
 <html lang="en">
 
@@ -54,37 +52,17 @@ include "fungsiCRUD.php";
             echo "<p class='text-danger text-center'>Error: File formAddTodo.php tidak ditemukan.</p>";
         }
         ?>
-        
         <div class="row">
             <!-- todolist -->
             <div class="col-md-8">
-                <?php 
-                if (file_exists("allTodo.php")) {
-                    include "allTodo.php"; 
-                } else {
-                    echo "<p class='text-danger text-center'>Error: File allTodo.php tidak ditemukan.</p>";
-                }
-                ?>
+                <?php include "allTodo.php"?>
             </div>
-            
-            <div class="col-md-8">
-                <?php 
-                if (file_exists("todobelumselesai.php")) {
-
-                    include "todobelumselesai.php"; 
-                } else {
-                    echo "<p class='text-danger text-center'>Error: File todobelumselesai.php tidak ditemukan.</p>";
-                }
-
-                if (file_exists("todoselesai.php")) {
-                    include "todoselesai.php"; 
-                } else {
-                    echo "<p class='text-danger text-center'>Error: File todoselesai.php tidak ditemukan.</p>";
-                }
-                ?>
-        
-            </div>
-        </div>
+            <div class="col-md-4">
+            <?php include "todoSelesai.php"?>
+            <br>
+            <?php include "todoBelumSelesai.php"?>
+             </div>
+    </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
